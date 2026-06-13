@@ -10,7 +10,6 @@ export default function WalletProviderWrapper({ children }: { children: React.Re
   return (
     <QueryClientProvider client={queryClient}>
       <SuiClientProvider
-        networks={{ mainnet: { url: 'https://fullnode.mainnet.sui.io:443', network: 'mainnet' } }}
         defaultNetwork="mainnet"
       >
         <WalletProvider autoConnect>
