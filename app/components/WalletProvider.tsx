@@ -9,9 +9,7 @@ const queryClient = new QueryClient()
 export default function WalletProviderWrapper({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <SuiClientProvider
-        defaultNetwork="mainnet"
-      >
+      <SuiClientProvider defaultNetwork="mainnet">
         <WalletProvider autoConnect>
           {children}
         </WalletProvider>
