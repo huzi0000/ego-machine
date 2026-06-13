@@ -6,14 +6,13 @@ import '@mysten/dapp-kit/dist/index.css'
 
 const queryClient = new QueryClient()
 
-const networks = {
-  mainnet: { url: 'https://fullnode.mainnet.sui.io:443' },
-}
-
 export default function WalletProviderWrapper({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <SuiClientProvider networks={networks} defaultNetwork="mainnet">
+      <SuiClientProvider
+        networks={{ mainnet: { url: 'https://fullnode.mainnet.sui.io:443', network: 'mainnet' } }}
+        defaultNetwork="mainnet"
+      >
         <WalletProvider autoConnect>
           {children}
         </WalletProvider>
