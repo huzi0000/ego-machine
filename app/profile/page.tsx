@@ -24,8 +24,7 @@ export default function ProfilePage() {
   const [profile, setProfile] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [reportLoading, setReportLoading] = useState(false)
-  const [reportData, setReportData] = useState<any>(null)
+  
 
   useEffect(() => {
     const saved = localStorage.getItem('ego-machine-userId')
@@ -33,21 +32,6 @@ export default function ProfilePage() {
     else window.location.href = '/'
   }, [])
 
-  async function generateReport() {
-    setReportLoading(true)
-    try {
-      const res = await fetch('/api/generate-report', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId }),
-      })
-      const data = await res.json()
-      setReportData(data)
-    } catch (e) {
-      console.error(e)
-    }
-    setReportLoading(false)
-  }
 
   async function fetchProfile(uid: string) {
     setLoading(true)
@@ -153,62 +137,7 @@ export default function ProfilePage() {
               </div>
             )}
 
-            {/* Memory Report */}
-            <div className="glass-card" style={{ border: '0.5px solid rgba(59,130,246,0.3)' }}>
-              <div style={{ fontSize: 11, color: '#3b82f6', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: '0.75rem', fontWeight: 600 }}>Memory Report</div>
-              <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.5)', marginBottom: '1rem', lineHeight: 1.6 }}>
-                Generate a full psychology report stored permanently on Walrus Protocol as a verifiable blob.
-              </p>
-
-              {!reportData && (
-                <button onClick={generateReport} disabled={reportLoading} className="btn-primary" style={{ background: reportLoading ? 'rgba(59,130,246,0.3)' : '#3b82f6' }}>
-                  {reportLoading ? 'Generating Report...' : 'Generate & Store on Walrus →'}
-                </button>
-              )}
-
-              {reportData && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                  <div style={{ background: 'rgba(29,158,117,0.08)', border: '0.5px solid rgba(29,158,117,0.2)', borderRadius: 12, padding: '1rem' }}>
-                    <div style={{ fontSize: 12, color: '#1d9e75', fontWeight: 600, marginBottom: 4 }}>✓ Stored on Walrus Protocol</div>
-                    {reportData.blobId && (
-                      <div style={{ fontSize: 11, fontFamily: 'monospace', color: 'rgba(255,255,255,0.4)', wordBreak: 'break-all' as const, marginBottom: 8 }}>
-                        Blob ID: {reportData.blobId}
-                      </div>
-                    )}
-                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' as const }}>
-                      {reportData.explorerUrl && (
-                        <a href={reportData.explorerUrl} target="_blank" style={{ fontSize: 12, color: '#3b82f6', background: 'rgba(59,130,246,0.1)', border: '0.5px solid rgba(59,130,246,0.2)', borderRadius: 20, padding: '4px 12px', textDecoration: 'none', fontWeight: 600 }}>
-                          View on Explorer ↗
-                        </a>
-                      )}
-                      {reportData.walrusUrl && (
-                        <a href={reportData.walrusUrl} target="_blank" style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', background: 'rgba(255,255,255,0.04)', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 20, padding: '4px 12px', textDecoration: 'none' }}>
-                          Raw Data ↗
-                        </a>
-                      )}
-                      <button onClick={generateReport} disabled={reportLoading} style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', background: 'transparent', border: '0.5px solid rgba(255,255,255,0.08)', borderRadius: 20, padding: '4px 12px', cursor: 'pointer' }}>
-                        Regenerate
-                      </button>
-                    </div>
-                  </div>
-
-                  {reportData.profile?.summary && (
-                    <div style={{ background: 'rgba(255,255,255,0.03)', border: '0.5px solid rgba(255,255,255,0.07)', borderRadius: 12, padding: '1rem' }}>
-                      <div style={{ fontSize: 11, color: '#3b82f6', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: 6, fontWeight: 600 }}>Analysis</div>
-                      <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7 }}>{reportData.profile.summary}</p>
-                    </div>
-                  )}
-
-                  {reportData.profile?.recommendation && (
-                    <div style={{ background: 'rgba(255,255,255,0.03)', border: '0.5px solid rgba(255,255,255,0.07)', borderRadius: 12, padding: '1rem' }}>
-                      <div style={{ fontSize: 11, color: '#3b82f6', textTransform: 'uppercase' as const, letterSpacing: '0.08em', marginBottom: 6, fontWeight: 600 }}>Recommendation</div>
-                      <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7 }}>{reportData.profile.recommendation}</p>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
+      
             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' as const }}>
               <button onClick={shareOnX} className="btn-primary" style={{ flex: 1, minWidth: 140 }}>Share on X →</button>
               <a href="/roast" className="btn-outline" style={{ flex: 1, minWidth: 140, textAlign: 'center', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>Get Roasted 🔥</a>
