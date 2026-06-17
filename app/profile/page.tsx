@@ -32,7 +32,21 @@ const [reportData, setReportData] = useState<any>(null)
     if (saved) { setUserId(saved); fetchProfile(saved) }
     else window.location.href = '/'
   }, [])
-
+async function generateReport() {
+  setReportLoading(true)
+  try {
+    const res = await fetch('/api/generate-report', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId }),
+    })
+    const data = await res.json()
+    setReportData(data)
+  } catch (e) {
+    console.error(e)
+  }
+  setReportLoading(false)
+}
   async function fetchProfile(uid: string) {
     async function generateReport() {
   setReportLoading(true)
